@@ -35,7 +35,14 @@ defmodule BarcodeGenerator do
       false
   """
   @spec valid?(integer() | String.t()) :: boolean()
-  def valid?(barcode) when is_binary(barcode), do: barcode |> String.to_integer() |> valid?()
+  def valid?(barcode) when is_binary(barcode) do
+    barcode
+    |> Integer.parse()
+    |> case do
+      {integer_barcode, _} -> valid?(integer_barcode)
+      _ -> false
+    end
+  end
 
   def valid?(barcode) do
     base = base(barcode)
